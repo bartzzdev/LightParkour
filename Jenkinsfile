@@ -9,6 +9,8 @@ pipeline {
     stages {
         stage('Initialize') {
            steps {
+                sh 'echo ${JAVA_HOME}'
+                sh 'echo ${PATH}'
                 sh 'java --version'
                 echo 'PATH = ${M2_HOME}/bin:${PATH}'
                 echo 'M2_HOME = /opt/maven'
