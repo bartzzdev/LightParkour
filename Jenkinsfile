@@ -1,9 +1,13 @@
 pipeline {
     agent any
 
+    environment {
+        JAVA_HOME = "${tool, 'JDK19'}"
+    }
+
     tools {
         maven 'Maven'
-        jdk 'JDK17'
+        jdk 'JDK19'
     }
 
     stages {
