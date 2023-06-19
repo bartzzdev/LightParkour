@@ -16,27 +16,21 @@ pipeline {
         stage('Compile') {
             steps {
                 echo 'Compiling..'
-                withMaven {
-                    sh 'mvn clean compile'
-                }
+                sh 'mvn clean compile'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Testing..'
-                withMaven {
-                    sh 'mvn test'
-                }
+                sh 'mvn test'
             }
         }
 
         stage('Build') {
             steps {
                 echo 'Building jar..'
-                withMaven {
-                    sh 'mvn package'
-                }
+                sh 'mvn package'
             }
         }
 
