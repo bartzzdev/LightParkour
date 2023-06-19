@@ -1,0 +1,4 @@
+name: LightParkour
+version: 1.0
+main: net.iambartz.lightparkour.paper.LightParkourPlugin
+api-version: 1.13
