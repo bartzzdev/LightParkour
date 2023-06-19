@@ -19,6 +19,7 @@ public class LightParkourPlugin extends JavaPlugin {
 
     private void initializeListeners() {
         var api = LightParkourPaperApi.get();
+        api.mapRepository();
         var logger = Logger.getLogger("LightParkour");
         logger.info("Initializing listeners");
         var pluginManager = Bukkit.getPluginManager();
