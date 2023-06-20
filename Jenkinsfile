@@ -42,7 +42,8 @@ pipeline {
                 echo 'Archiving jar..'
                 archiveArtifacts artifacts: 'lightparkour-paper/target/LightParkour.jar', fingerprint: true
                 echo 'Copying jar to the shared directory..'
-                sh 'cp lightparkour-paper/target/LightParkour.jar /artifacts'
+                sh 'rm /artifacts/LightParkour.jar -f'
+                sh 'mv lightparkour-paper/target/LightParkour.jar /artifacts'
             }
         }
     }
