@@ -7,9 +7,10 @@ import net.iambartz.lightparkour.paper.player.repository.GamePlayerRecordBuilder
 import net.iambartz.lightparkour.paper.player.repository.PlayerRepository;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -33,7 +34,6 @@ public final class PlayerService {
      * Handles the {@link PlayerJoinEvent}. Creates a new GamePlayer instance for the player
      * and stores their data in the database if a record does not exist.
      * @param event the PlayerJoinEvent to handle
-     * @return a new instance of a {@link GamePlayer}
      */
     public void handlePlayerJoinEvent(PlayerJoinEvent event) {
         var logger = Logger.getLogger("LightParkour");
@@ -52,6 +52,7 @@ public final class PlayerService {
                 .thenAccept(it -> {
                     it.setPlayer(player);
                     it.applyEffect(FIRST_JOIN_EFFECT);
+                    logger.info("Applying an effect to the player.");
                 })
                 .exceptionallyAsync(throwable -> {
                     logger.severe(throwable.getMessage());
@@ -59,7 +60,7 @@ public final class PlayerService {
                 })
                 .whenComplete((result, ex) -> {
                     long elapsedTime = System.currentTimeMillis() - start;
-                    logger.info(String.format("Time spent on the query: %s", elapsedTime));
+                    logger.info(String.format("Time spent on the query: %s ms.", elapsedTime));
                 });
     }
 
