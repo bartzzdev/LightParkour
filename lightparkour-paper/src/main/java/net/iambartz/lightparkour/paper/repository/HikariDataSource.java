@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 public final class HikariDataSource {
     private static final HikariConfig CONFIG;
@@ -15,10 +14,10 @@ public final class HikariDataSource {
 
     static {
         var properties = new Properties();
-        properties.setProperty("dataSource.user", "light_parkour");
+        properties.setProperty("dataSource.user", "bart");
         properties.setProperty("dataSource.password", "secret");
-        properties.setProperty("dataSource.databaseName", "light_parkour");
-        properties.setProperty("dataSource.serverName", "parkour-database");
+        properties.setProperty("dataSource.databaseName", "bart_db");
+        properties.setProperty("dataSource.serverName", "database");
         properties.setProperty("dataSourceClassName", "com.impossibl.postgres.jdbc.PGDataSource");
         CONFIG = new HikariConfig(properties);
         DATA_SOURCE = new com.zaxxer.hikari.HikariDataSource(CONFIG);

@@ -1,23 +1,31 @@
 version: '3.7'
 
 services:
-  parkour-database:
+  database:
     image: postgres
     environment:
       POSTGRES_PASSWORD: secret
-      POSTGRES_USER: light_parkour
-      POSTGRES_DB: light_parkour
+      POSTGRES_USER: bart
+      POSTGRES_DB: bart_db
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - type: volume
+        source: db_data
+        target: /var/lib/postgresql/data
 
   paper-server:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: marctv/minecraft-papermc-server:1.18
+    container_name: paper-server
+    environment:
+      MEMORYSIZE: 1G
     depends_on:
-      - parkour-database
+      - database
     ports:
       - "25565:25565"
+    volumes:
+      - type: volume
+        source: shared-artifacts
+        target: /data/plugins
 
 volumes:
   db_data:
+  shared-artifacts:
