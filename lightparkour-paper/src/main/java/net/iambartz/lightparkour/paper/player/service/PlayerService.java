@@ -52,7 +52,7 @@ public final class PlayerService {
                 .thenAccept(it -> {
                     it.setPlayer(player);
                     it.applyEffect(FIRST_JOIN_EFFECT);
-                    logger.info("Applying an effect to the player.");
+                    logger.info("Applying an effect to the player!");
                 })
                 .exceptionallyAsync(throwable -> {
                     logger.severe(throwable.getMessage());
