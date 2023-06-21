@@ -1,6 +1,6 @@
 package net.iambartz.lightparkour.paper;
 
-import net.iambartz.lightparkour.paper.player.listener.PlayerJoinListener;
+import net.iambartz.lightparkour.paper.player.listener.PlayerSessionListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,11 +18,10 @@ public class LightParkourPlugin extends JavaPlugin {
     }
 
     private void initializeListeners() {
-        var api = LightParkourPaperApi.get();
-        api.mapRepository();
+        LightParkourPaperApi.get();
         var logger = Logger.getLogger("LightParkour");
         logger.info("Initializing listeners");
         var pluginManager = Bukkit.getPluginManager();
-        pluginManager.registerEvents(new PlayerJoinListener(), this);
+        pluginManager.registerEvents(new PlayerSessionListener(), this);
     }
 }

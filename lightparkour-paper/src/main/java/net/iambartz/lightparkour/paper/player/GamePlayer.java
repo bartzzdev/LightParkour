@@ -3,8 +3,6 @@ package net.iambartz.lightparkour.paper.player;
 import net.iambartz.lightparkour.api.player.PlayerSession;
 import net.iambartz.lightparkour.paper.player.effect.Effect;
 import net.iambartz.lightparkour.paper.player.effect.EffectApplicable;
-import net.iambartz.lightparkour.paper.player.repository.GamePlayerRecord;
-import net.iambartz.lightparkour.paper.player.repository.GamePlayerRecordBuilder;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -63,5 +61,18 @@ public class GamePlayer implements PlayerSession, PhysicalPlayerAppearance, Effe
     @Override
     public void applyEffect(Effect<GamePlayer> effect) {
         effect.spawn(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GamePlayer that = (GamePlayer) o;
+        return Objects.equals(playerSession, that.playerSession) && Objects.equals(bukkitPlayer, that.bukkitPlayer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(playerSession, bukkitPlayer);
     }
 }
