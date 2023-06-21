@@ -34,25 +34,32 @@ public final class PlayerService {
         var player = event.getPlayer();
         var playerId = player.getUniqueId();
         long start = System.currentTimeMillis();
-        playerRepository.findByIdAsync(playerId)
-                .thenCompose(record -> {
-                    if (record.isEmpty()) {
-                        return storeNewPlayerData(player);
-                    } else {
-                        return CompletableFuture.completedFuture(record);
-                    }
-                })
-                .thenApplyAsync(GamePlayerRecord::toTarget)
-                .thenAcceptAsync(this::addLivePlayer)
-                .exceptionallyAsync(throwable -> {
-                    logger.severe(throwable.getMessage());
-                    return null;
-                })
-                .whenComplete((result, ex) -> {
-                    long elapsedTime = System.currentTimeMillis() - start;
-                    logger.info(String.format("Time spent on the query: %s ms.", elapsedTime));
-                });
+        var gamePlayer = playerRepository.findById(playerId)
+                .map(GamePlayerRecord::toTarget)
+                .orElse(storeNewPlayerData(player).toTarget());
+        this.addLivePlayer(gamePlayer);
+        long elapsedTime = System.currentTimeMillis() - start;
+        logger.info(String.format("Time spent on the query: %s ms.", elapsedTime));
+//        playerRepository.findByIdAsync(playerId)
+//                .thenCompose(record -> {
+//                    if (record.isEmpty()) {
+//                        return storeNewPlayerData(player);
+//                    } else {
+//                        return CompletableFuture.completedFuture(record);
+//                    }
+//                })
+//                .thenApplyAsync(GamePlayerRecord::toTarget)
+//                .thenAcceptAsync(this::addLivePlayer)
+//                .exceptionallyAsync(throwable -> {
+//                    logger.severe(throwable.getMessage());
+//                    return null;
+//                })
+//                .whenComplete((result, ex) -> {
+//                    long elapsedTime = System.currentTimeMillis() - start;
+//                    logger.info(String.format("Time spent on the query: %s ms.", elapsedTime));
+//                });
     }
+
 
     private void addLivePlayer(GamePlayer player) {
         this.livePlayers.put(player.getId(), player);
@@ -72,18 +79,31 @@ public final class PlayerService {
             return;
         }
 
-        this.playerRepository.saveAsync(GamePlayerRecordBuilder.newBuilder()
+        this.playerRepository.save(GamePlayerRecordBuilder.newBuilder()
                 .id(player.getId())
                 .name(player.getName())
-                .build())
-                .whenComplete((result, ex) -> {
-                    long elapsedTime = System.currentTimeMillis() - start;
-                    logger.info(String.format("Time spent on the query: %s ms.", elapsedTime));
-                });
+                .build());
+        long elapsedTime = System.currentTimeMillis() - start;
+        logger.info(String.format("Time spent on the query: %s ms.", elapsedTime));
+//        this.playerRepository.saveAsync(GamePlayerRecordBuilder.newBuilder()
+//                .id(player.getId())
+//                .name(player.getName())
+//                .build())
+//                .whenComplete((result, ex) -> {
+//                    long elapsedTime = System.currentTimeMillis() - start;
+//                    logger.info(String.format("Time spent on the query: %s ms.", elapsedTime));
+//                });
     }
 
-    private CompletableFuture<GamePlayerRecord> storeNewPlayerData(Player player) {
+    private CompletableFuture<GamePlayerRecord> storeNewPlayerDataAsync(Player player) {
         return playerRepository.saveAsync(GamePlayerRecordBuilder.newBuilder()
+                .id(player.getUniqueId())
+                .name(player.getName())
+                .build());
+    }
+
+    private GamePlayerRecord storeNewPlayerData(Player player) {
+        return playerRepository.save(GamePlayerRecordBuilder.newBuilder()
                 .id(player.getUniqueId())
                 .name(player.getName())
                 .build());
